@@ -15,8 +15,12 @@ public class GreetingController {
     }
 
     @GetMapping
-    public GreetingResponse getGreeting() {
-        return new GreetingResponse(greetingService.getGreetingMessage());
+    public GreetingResponse getGreeting(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName) {
+
+        String message = greetingService.getGreetingMessage(firstName, lastName);
+        return new GreetingResponse(message);
     }
 
     public record GreetingResponse(String message) {}
