@@ -8,10 +8,10 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Greeting {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String message;
 
     // Constructors
