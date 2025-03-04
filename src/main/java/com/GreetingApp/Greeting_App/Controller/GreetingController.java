@@ -25,3 +25,6 @@ public class GreetingController {
 
     public record GreetingResponse(String message) {}
 }
+
+
+//http://localhost:8080/greeting?firstName=Nomicy&lastName=Gupta
