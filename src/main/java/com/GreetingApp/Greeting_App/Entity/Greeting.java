@@ -12,11 +12,14 @@ public class Greeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String message;
 
-    // Constructors
-    public Greeting() {}
+    // Default constructor
+    public Greeting() {
+    }
 
+    // Constructor with parameters
     public Greeting(String message) {
         this.message = message;
     }
