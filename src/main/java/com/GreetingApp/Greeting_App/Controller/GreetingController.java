@@ -3,58 +3,55 @@ package com.GreetingApp.Greeting_App.Controller;
 
 import com.GreetingApp.Greeting_App.Service.GreetingService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import com.GreetingApp.Greeting_App.Entity.Greeting;
 
-
-import java.net.URI;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/greetings")
 public class GreetingController {
+    private final GreetingService greetingService;
 
-    @Autowired
-    private GreetingService greetingService;
-
-    // CREATE a new greeting
-    @PostMapping
-    public ResponseEntity<Greeting> createGreeting(@RequestBody Greeting greeting) {
-        Greeting savedGreeting = greetingService.createGreeting(greeting);
-        return new ResponseEntity<>(savedGreeting, HttpStatus.CREATED);
+    public GreetingController(GreetingService greetingService) {
+        this.greetingService = greetingService;
     }
 
-    // READ all greetings
+    // ✅ GET method to retrieve all greetings
     @GetMapping
-    public ResponseEntity<List<Greeting>> getAllGreetings() {
-        List<Greeting> greetings = greetingService.getAllGreetings();
-        return ResponseEntity.ok(greetings);
+    public List<Greeting> getAllGreetings() {
+        return greetingService.getAllGreetings();
     }
 
-    // READ a single greeting by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Greeting> getGreetingById(@PathVariable Long id) {
-        Greeting greeting = greetingService.getGreetingById(id);
-        return ResponseEntity.ok(greeting);
-    }
-
-    // UPDATE a greeting by ID
-    @PutMapping("/{id}")
-    public ResponseEntity<Greeting> updateGreeting(@PathVariable Long id, @RequestBody Greeting updatedGreeting) {
-        Greeting updated = greetingService.updateGreeting(id, updatedGreeting);
-        return ResponseEntity.ok(updated);
-    }
-
-    // DELETE a greeting by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGreeting(@PathVariable Long id) {
-        greetingService.deleteGreeting(id);
-        return ResponseEntity.noContent().build();
+    // ✅ POST method to add a new greeting
+    @PostMapping
+    public Greeting createGreeting(@RequestBody Greeting greeting) {
+        return greetingService.saveGreeting(greeting);
     }
 }
+
+
+//http://localhost:8080/greetings (POST, GET)
+
+//[
+//        {
+//        "id": 1,
+//        "message": "Hello, Spring Boot!"
+//        },
+//        {
+//        "id": 2,
+//        "message": "Hello, Nomicy!"
+//        },
+//        {
+//        "id": 3,
+//        "message": "Hello, Sanjana!"
+//        }
+//        ]
+
 
 
 //http://localhost:8080/greetings
