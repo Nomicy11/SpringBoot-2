@@ -14,7 +14,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/h2-console/**").permitAll() // Allow register API and H2 Console
+                        .requestMatchers("/auth/register", "/h2-console/**", "/auth/login").permitAll() // Allow register API and H2 Console
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())  // Disable CSRF for APIs
