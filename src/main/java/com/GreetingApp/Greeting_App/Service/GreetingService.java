@@ -5,33 +5,47 @@ package com.GreetingApp.Greeting_App.Service;
 import com.GreetingApp.Greeting_App.Entity.Greeting;
 import com.GreetingApp.Greeting_App.Repository.GreetingRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.stereotype.Service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
 
 @Service
 public class GreetingService {
-    private final GreetingRepository greetingRepository;
 
-    public GreetingService(GreetingRepository greetingRepository) {
-        this.greetingRepository = greetingRepository;
+    @Autowired
+    private GreetingRepository greetingRepository;
+
+    // CREATE a new greeting
+    public Greeting createGreeting(Greeting greeting) {
+        return greetingRepository.save(greeting);
     }
 
-    public String getGreetingMessage(String firstName, String lastName) {
-        String message;
+    // READ all greetings
+    public List<Greeting> getAllGreetings() {
+        return greetingRepository.findAll();
+    }
 
-        if (firstName != null && !firstName.isBlank() && lastName != null && !lastName.isBlank()) {
-            message = "Hello, " + firstName.trim() + " " + lastName.trim() + "!";
-        } else if (firstName != null && !firstName.isBlank()) {
-            message = "Hello, " + firstName.trim() + "!";
-        } else if (lastName != null && !lastName.isBlank()) {
-            message = "Hello, " + lastName.trim() + "!";
-        } else {
-            message = "Hello World!";
-        }
+    // READ a single greeting by ID
+    public Greeting getGreetingById(Long id) {
+        return greetingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Greeting not found"));
+    }
 
-        // Save the greeting message to the database
-        Greeting greeting = new Greeting(message);
-        greetingRepository.save(greeting);
+    // UPDATE a greeting
+    public Greeting updateGreeting(Long id, Greeting updatedGreeting) {
+        Greeting existingGreeting = getGreetingById(id);
+        existingGreeting.setMessage(updatedGreeting.getMessage());
+        return greetingRepository.save(existingGreeting);
+    }
 
-        return message;
+    // DELETE a greeting
+    public void deleteGreeting(Long id) {
+        Greeting greeting = getGreetingById(id);
+        greetingRepository.delete(greeting);
     }
 }
