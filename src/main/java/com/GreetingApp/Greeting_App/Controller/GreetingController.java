@@ -1,34 +1,23 @@
 package com.GreetingApp.Greeting_App.Controller;
 
+
+import com.GreetingApp.Greeting_App.Service.GreetingService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/greeting")
 public class GreetingController {
 
+    private final GreetingService greetingService;
+
+    public GreetingController(GreetingService greetingService) {
+        this.greetingService = greetingService;
+    }
+
     @GetMapping
-    public String getGreeting() {
-        return "{\"message\": \"Hello from GET\"}";
+    public GreetingResponse getGreeting() {
+        return new GreetingResponse(greetingService.getGreetingMessage());
     }
 
-    @PostMapping
-    public String postGreeting() {
-        return "{\"message\": \"Hello from POST\"}";
-    }
-
-    @PutMapping
-    public String putGreeting() {
-        return "{\"message\": \"Hello from PUT\"}";
-    }
-
-    @DeleteMapping
-    public String deleteGreeting() {
-        return "{\"message\": \"Hello from DELETE\"}";
-    }
+    public record GreetingResponse(String message) {}
 }
-
-
-//http://localhost:8080/greeting (Postman)
-
-//curl -X POST http://localhost:8080/greeting
-
