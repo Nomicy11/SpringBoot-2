@@ -2,6 +2,7 @@ package com.GreetingApp.Greeting_App.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +15,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/h2-console/**", "/auth/login").permitAll() // Allow register API and H2 Console
+                        .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll() // Allow POST requests
+                        .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html",
+                                "/v3/api-docs/swagger-config").permitAll() // Allow Swagger & H2 Console
                         .anyRequest().authenticated()
                 )
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for APIs
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Allow H2 Console frame embedding
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/register", "/auth/login")) // Disable CSRF only for APIs
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Allow H2 Console in frames
 
         return http.build();
     }
