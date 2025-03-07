@@ -17,10 +17,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll() // Allow POST requests
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html",
-                                "/v3/api-docs/swagger-config").permitAll() // Allow Swagger & H2 Console
+                                "/v3/api-docs/swagger-config").permitAll()
+                        .requestMatchers("/auth/forgotPassword/**", "/auth/resetPassword/**").permitAll()// Allow Swagger & H2 Console
                         .anyRequest().authenticated()
                 )
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/register", "/auth/login")) // Disable CSRF only for APIs
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/**")) // Disable CSRF only for APIs
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Allow H2 Console in frames
 
         return http.build();

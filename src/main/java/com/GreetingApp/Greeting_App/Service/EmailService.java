@@ -39,4 +39,6 @@ public class EmailService {
         String messageBody = "You have successfully logged in!\n\nIf this wasn't you, please reset your password immediately.";
         sendEmail(toEmail, name, "‼️Login Alert‼️", messageBody);
     }
+
+
 }
